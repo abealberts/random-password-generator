@@ -13,12 +13,12 @@ function writePassword() {
 
 function generatePassword() {
 
-  var newPassData = [0, 0, 0, 0]
-
-  var newPass = " "
+  var newPassArray = [];
+  var newPass = "";
 
   var passCriteria = {
     passLength: prompt("Enter password length (8-128 characters):"),
+    containsLower: false,
     containsCaps: false,
     containsNum: false,
     containsSpecial: false,
@@ -30,38 +30,57 @@ function generatePassword() {
   function validate(userinput) {
     if (passCriteria.passLength >= 8 && passCriteria.passLength <= 128) {
       charInquiry();
-      newPassData[0] = passCriteria.passLength;
+      passValidate();
     } else {
       alert("Invalid password length. Password must be between 8-128 characters.");
-      newPass = "Password generation failed. Please try again with valid inputs."
+      newPass = "Password generation failed. Please try again with valid inputs.";
       return;
     }
   }
 
   //confirms different character types & outputs to newPassData array
   function charInquiry() {
+    passCriteria.containsLower = confirm("Would you like your password to contain lowercase letters?");
     passCriteria.containsCaps = confirm("Would you like your password to contain capital letters?");
-    newPassData[1] = passCriteria.containsCaps;
-
     passCriteria.containsNum = confirm("Would you like your password to contain numbers?");
-    newPassData[2] = passCriteria.containsNum;
-
     passCriteria.containsSpecial = confirm("Would you like your password to contain special characters?");
-    newPassData[3] = passCriteria.containsSpecial;
 
-    //for testing only, remove when further along
-    newPass = newPassData;
-  }
-newPass
+    //for testing only, remove when further along;
+  };
+
+  function passValidate() {
+    if (passCriteria.containsLower || passCriteria.containsCaps || passCriteria.containsNum || passCriteria.containsSpecial) {
+      generate();
+    } else {
+      alert("Password must contain at least one type of character. Please try again with valid inputs.");
+      newPass = "Password must contain at least one type of character. Please try again with valid inputs.";
+    }
+  };
+
+  function generate() {
+    var lowers = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+    console.log(lowers.length);
+    var rand = "";
+
+    for (let i = 0; i < passCriteria.passLength; i++) {
+      rand = lowers[Math.floor(Math.random() * lowers.length)];
+      newPassArray.push(...rand);
+      console.log(newPassArray);
+    }
+
+    return newPass;
+  };
+
   //calls validate function using user inputted length
   validate(passCriteria.passLength);
 
   console.log("Password length: " + passCriteria.passLength);
+  console.log("Lowercase: " + passCriteria.containsLower);
   console.log("Caps: " + passCriteria.containsCaps);
   console.log("#s: " + passCriteria.containsNum);
   console.log("Special: " + passCriteria.containsSpecial);
-  console.log("newPassData: " + newPassData);
 
+  newPass = newPassArray.join("");
   return newPass;
 }
 
