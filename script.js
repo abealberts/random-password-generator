@@ -59,16 +59,52 @@ function generatePassword() {
   };
 
   function generate() {
-    var lowers = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-    var caps = []
-    console.log(lowers.length);
+    var lowers = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    var caps = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    var special = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"];
+    var pool = [];
+
     var rand = "";
 
-    for (let i = 0; i < passCriteria.passLength; i++) {
-      rand = lowers[Math.floor(Math.random() * lowers.length)];
-      newPassArray.push(...rand);
-      console.log(newPassArray);
-    }
+    pool.concat(lowers);
+    console.log("Pool: " + pool);
+
+    function assemblePool(){
+      if (passCriteria.containsLower === true){
+        lowers.concat(pool);
+        console.log("Character Pool: " + pool);
+      }
+
+      if (passCriteria.containsCaps === true){
+        caps.concat(pool);
+        console.log("Character Pool: " + pool);
+      }
+
+      if (passCriteria.containsNum === true){
+        numbers.concat(pool);
+        console.log("Character Pool: " + pool);
+      }
+
+      if (passCriteria.containsSpecial === true){
+        special.concat(pool);
+        console.log("Character Pool: " + pool);
+      }
+    };
+
+    rand = pool[Math.floor(Math.random() * pool.length)];
+
+    //Concats relevant character arrays into pool array
+    assemblePool();
+    console.log(pool);
+
+    //This for loop picks random characters out of the pool array until it meets the user-specified password length
+    //for (let i = 0; i < passCriteria.passLength; i++) {
+    //  rand = pool[Math.floor(Math.random() * pool.length)];
+    //  console.log(rand);
+    //  newPassArray.push(...rand);
+    //  console.log(newPassArray);
+    //};
 
     return newPass;
   };
@@ -76,17 +112,20 @@ function generatePassword() {
   //calls validate function using user inputted length
   validate(passCriteria.passLength);
 
+  //Debug logs
   console.log("Password length: " + passCriteria.passLength);
   console.log("Lowercase: " + passCriteria.containsLower);
   console.log("Caps: " + passCriteria.containsCaps);
   console.log("#s: " + passCriteria.containsNum);
   console.log("Special: " + passCriteria.containsSpecial);
 
+  //converts newPassArray content into a string without commas
   newPass = newPassArray.join("");
+
+  //returns newly generated password
   return newPass;
 }
 
-//Need to build random character generator
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
