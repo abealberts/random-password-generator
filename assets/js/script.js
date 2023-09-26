@@ -41,7 +41,7 @@ function generatePassword() {
     } else {
       alert("Invalid password length. Password must be between 8-128 characters.");
       return;
-    }
+    };
   }
 
   //confirms different character types & outputs to newPassData array
@@ -62,7 +62,10 @@ function generatePassword() {
   };
 
   function generate() {
+    newPassArray = [];
+    pool = [];
 
+    //adds selected character types to the pool array
     function assemblePool(){
       if (passCriteria.containsLower){
         pool = pool.concat(lowers);
@@ -91,7 +94,38 @@ function generatePassword() {
       newPassArray.push(...rand);
     };
 
+    //Validates that at least one character of each selected character type is included in the newPassArray. Will call generate() until password meets criteria.
+    criteriaCheck();
+  };
+
+  function criteriaCheck() {
+    
     console.log("new pass array: " + newPassArray);
+
+    //searches newly generated newPassArray to find at least one of a specific character type: returns true if any are included
+    var lowersFound = newPassArray.some(ai => lowers.includes(ai));
+    var capsFound = newPassArray.some(ai => caps.includes(ai));
+    var numbersFound = newPassArray.some(ai => numbers.includes(ai));
+    var specialFound = newPassArray.some(ai => special.includes(ai));
+
+    console.log("lowersFound: " + lowersFound);
+    console.log("capsFound: " + capsFound);
+    console.log("numbersFound: " + numbersFound);
+    console.log("specialFound: " + specialFound);
+
+    //checks to see if the user selected character types are all included in the generated array. Will regenerate the newPassArray until all criteria are met
+    if (passCriteria.containsLower && !lowersFound){
+      generate();
+    };
+    if (passCriteria.containsCaps && !capsFound){
+      generate();
+    };
+    if (passCriteria.containsNum && !numbersFound){
+      generate();
+    };
+    if (passCriteria.containsSpecial && !specialFound){
+      generate();
+    };
   };
 
   //calls validate function using user inputted length
@@ -103,30 +137,6 @@ function generatePassword() {
   console.log("Caps: " + passCriteria.containsCaps);
   console.log("#s: " + passCriteria.containsNum);
   console.log("Special: " + passCriteria.containsSpecial);
-
-  //searches newly generated newPassArray to find at least one of a specific character type: returns true if any are included
-  var lowersFound = newPassArray.some(ai => lowers.includes(ai));
-  var capsFound = newPassArray.some(ai => caps.includes(ai));
-  var numbersFound = newPassArray.some(ai => numbers.includes(ai));
-  var specialFound = newPassArray.some(ai => special.includes(ai));
-
-  //Validates that at least one of each selected character type is included in the newPassArray. Will call generate() until password meets criteria.
-  if (passCriteria.containsLower && !lowersFound) {
-    newPassArray = [];
-    generate();
-  }
-  if (passCriteria.containsCaps && !capsFound) {
-    newPassArray = [];
-    generate();
-  }
-  if (passCriteria.containsNum && !numbersFound) {
-    newPassArray = [];
-    generate();
-  }
-  if (passCriteria.containsSpecial && !specialFound) {
-    newPassArray = [];
-    generate();
-  }
 
   //converts newPassArray content into a string without commas
   newPass = newPassArray.join("");
