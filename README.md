@@ -11,7 +11,7 @@ This project is a simple password generator that generates random strings of cha
 
 ## Usage
 
-### [Generate your password here: Online Password Generator]()
+### [Generate your password here: Online Password Generator](https://abealberts.github.io/random-password-generator/)
 
 Screenshot:
 
